@@ -21,7 +21,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Serve Easy',
       theme: ThemeData(
-          primaryColor: kPrimaryColor, scaffoldBackgroundColor: Colors.white),
+          primaryColor: kPrimaryColor, scaffoldBackgroundColor: secondColor),
       home: SplashScreen(),
     );
   }

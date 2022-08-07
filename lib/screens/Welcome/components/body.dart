@@ -21,7 +21,8 @@ class Body extends StatelessWidget {
           children: <Widget>[
             const Text(
               'WELCOME TO SERVE EASY',
-              style: TextStyle(fontWeight: FontWeight.bold),
+              style:
+                  TextStyle(color: scaffoldColor, fontWeight: FontWeight.bold),
             ),
             SizedBox(
               height: size.height * 0.03,
@@ -41,6 +42,7 @@ class Body extends StatelessWidget {
                   ),
                 );
               },
+              color: blueColor,
               text: 'LOGIN',
             ),
             SizedBox(
