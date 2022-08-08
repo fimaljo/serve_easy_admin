@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:serve_easy/screens/Additem/add_item.dart';
 import 'package:serve_easy/screens/Home/components/items_tab.dart';
 import 'package:serve_easy/screens/Home/components/orders_tab.dart';
 import 'package:serve_easy/screens/Home/components/payment_tab.dart';
@@ -16,6 +15,15 @@ class HomePage extends StatelessWidget {
       child: Scaffold(
         backgroundColor: secondColor,
         appBar: AppBar(
+          leading:
+              IconButton(onPressed: () {}, icon: Icon(Icons.account_circle)),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  FirebaseAuth.instance.signOut();
+                },
+                icon: Icon(Icons.logout))
+          ],
           backgroundColor: secondColor,
           elevation: 0,
           automaticallyImplyLeading: false,

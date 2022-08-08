@@ -104,33 +104,49 @@ class _BodyState extends State<Body> {
 
   Future signUp() async {
     final isValid = formKey.currentState!.validate();
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final User? user = auth.currentUser;
+    final String kUseremail = emailController.text.trim();
+    final String kUserpasseord = emailController.text.trim();
+    //String myuid = user.uid;
+
     if (!isValid) return;
 
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: emailController.text.trim(),
-        password: passwordController.text.trim(),
-      );
+      await FirebaseAuth.instance
+          .createUserWithEmailAndPassword(
+              email: kUseremail, password: kUserpasseord)
+          .then((value) {
+        if (value != null && value.user != null) {
+          FirebaseFirestore.instance
+              .collection('adminuser')
+              .doc(value.user!.uid)
+              .set({
+            'hotel logo': 'hotelLogo',
+            'hotel name': nameController.text.trim(),
+            'email': kUseremail,
+            'uid': value.user!.uid,
+          });
+        }
+      });
       //add user detiles
-      addUserDetails(
-        'logo',
-        nameController.text.trim(),
-        emailController.text.trim(),
-      );
+
     } on FirebaseAuthException catch (e) {
       Utils.showSnackBar(e.message);
     }
   }
 
-  Future addUserDetails(
-    String hotelLogo,
-    String hotelName,
-    String email,
-  ) async {
-    await FirebaseFirestore.instance.collection('adminuser').add({
-      'hotel logo': hotelLogo,
-      'hotel name': hotelName,
-      'email': email,
-    });
-  }
+  // Future addUserDetails(
+  //   String hotelLogo,
+  //  String hotelName,
+  //  String email,
+  //  String uid,
+  // ) async {
+  //  await FirebaseFirestore.instance.collection('adminuser').add({
+  //    'hotel logo': hotelLogo,
+  //   'hotel name': hotelName,
+  //   'email': email,
+  //    'uid': uid,
+  //  });
+  // }
 }
