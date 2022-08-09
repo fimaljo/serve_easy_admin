@@ -27,6 +27,9 @@ class CommonInputField extends StatelessWidget {
           hintText: hintText,
           border: InputBorder.none,
         ),
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        validator: (value) =>
+            value != null && value.length < 3 ? 'Enter Data' : null,
       ),
     );
   }

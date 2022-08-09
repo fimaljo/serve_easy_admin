@@ -1,8 +1,11 @@
 class Category {
+  // final String categoryId;
   final String categoryImage;
   final String categoryName;
 
-  Category({
+  Category(
+      // this.categoryId,
+      {
     required this.categoryImage,
     required this.categoryName,
   });
@@ -17,3 +20,4 @@ class Category {
       : categoryImage = map['categoryImage'] ?? "",
         categoryName = map['categoryName'] ?? "";
 }
+//categoryId = map['categoryId'] ?? "",
