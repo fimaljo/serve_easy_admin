@@ -28,23 +28,23 @@ class _AdminAddProductPageState extends ConsumerState<AdminAddCategoryPage> {
     final storage = ref.read(databaseProvider);
     final FirebaseAuth _auth = FirebaseAuth.instance;
     final isValid = formKey.currentState!.validate();
-    // final categoryid = randomAlphaNumeric(16);
+    final categoryid = randomAlphaNumeric(16);
     if (storage == null) {
       return;
     }
     if (!isValid) return;
     {
       await storage.addCategory(
-          Category(
-              categoryImage: categoryImageEditingController.text,
-              categoryName: titleTextEditingController.text),
-          _auth.currentUser!.uid);
+        Category(
+            categoryImage: categoryImageEditingController.text,
+            categoryName: titleTextEditingController.text),
+      );
     }
 
     Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => AdminAddProductPage(),
+          builder: (context) => AdminAddProductPage(categoryid),
         ));
   }
 
@@ -75,7 +75,6 @@ class _AdminAddProductPageState extends ConsumerState<AdminAddCategoryPage> {
                 hintText: 'Add Category Image Url',
                 icon: Icons.image,
               ),
-
               const Spacer(),
               RoundedButton(
                   text: 'Create Category',
@@ -85,7 +84,6 @@ class _AdminAddProductPageState extends ConsumerState<AdminAddCategoryPage> {
               SizedBox(
                 height: 30,
               )
-              //there is some logic problem creating category
             ],
           ),
         ),
