@@ -15,8 +15,6 @@ class FirestoreService {
     Category category,
   ) async {
     await _firestore
-        .collection('adminuser')
-        .doc(_auth.currentUser!.uid)
         .collection('category')
         .add(category.toMap())
         .catchError((e) {

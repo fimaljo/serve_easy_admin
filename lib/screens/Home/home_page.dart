@@ -15,33 +15,31 @@ class HomePage extends StatelessWidget {
       child: Scaffold(
         backgroundColor: secondColor,
         appBar: AppBar(
-          leading:
-              IconButton(onPressed: () {}, icon: Icon(Icons.account_circle)),
-          actions: [
-            IconButton(
-                onPressed: () {
-                  FirebaseAuth.instance.signOut();
-                },
-                icon: Icon(Icons.logout))
-          ],
-          backgroundColor: secondColor,
-          elevation: 0,
-          automaticallyImplyLeading: false,
-          centerTitle: true,
-          title: const Text(
-            'S E R V E   E A S Y',
-            style: TextStyle(
-              color: kPrimaryLightColor,
-            ),
-          ),
-        ),
+            leading:
+                IconButton(onPressed: () {}, icon: Icon(Icons.account_circle)),
+            actions: [
+              IconButton(
+                  onPressed: () {
+                    FirebaseAuth.instance.signOut();
+                  },
+                  icon: Icon(Icons.logout))
+            ],
+            backgroundColor: secondColor,
+            elevation: 0,
+            automaticallyImplyLeading: false,
+            centerTitle: true,
+            title: Image(
+                height: 40,
+                image: AssetImage(
+                  'assets/images/logo.jpeg',
+                ))),
         body: Column(
           children: [
             TabBar(
               indicator: BoxDecoration(
                   color: blueColor, borderRadius: BorderRadius.circular(20)),
               labelColor: Colors.white,
-              unselectedLabelColor: Colors.white,
+              unselectedLabelColor: blueColor,
               tabs: const [
                 Tab(
                   text: 'ITEAMS',

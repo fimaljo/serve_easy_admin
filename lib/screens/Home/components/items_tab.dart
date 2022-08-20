@@ -41,40 +41,55 @@ class ItemsTab extends ConsumerWidget {
                   return Padding(
                     padding:
                         const EdgeInsets.only(top: 30, right: 30, left: 30),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).push(
-                            MaterialPageRoute(
-                              builder: (context) => ProductsPage(),
-                            ),
-                          );
-                        },
-                        child: Container(
-                          height: 100,
-                          decoration: const BoxDecoration(
-                            image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: NetworkImage(
-                                  "https://imagesvc.meredithcorp.io/v3/mm/image?url=https%3A%2F%2Fstatic.onecms.io%2Fwp-content%2Fuploads%2Fsites%2F19%2F2017%2F08%2F17%2FGettyImages-545286388-2000.jpg&q=60"),
-                            ),
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (context) => ProductsPage(),
                           ),
-                          child: Center(
-                              child: Text(
+                        );
+                      },
+                      child: Container(
+                        height: 120,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Color(0xFFe8e8e8),
+                              blurRadius: 5.0,
+                              offset: Offset(0, 14),
+                            ),
+                            BoxShadow(
+                              color: blueColor,
+                              offset: Offset(-5, 0),
+                            ),
+                            BoxShadow(
+                              color: Color(0xFFe8e8e8),
+                              offset: Offset(5, 0),
+                            ),
+                          ],
+                          image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: NetworkImage(categoryrec.categoryImage),
+                          ),
+                        ),
+                        child: Center(
+                          child: Text(
                             categoryrec.categoryName,
                             style: TextStyle(
-                                fontSize: 30,
-                                color: scaffoldColor,
-                                fontWeight: FontWeight.bold,
-                                letterSpacing: 4,
-                                shadows: [
-                                  Shadow(
-                                      color: Colors.black.withOpacity(0.8),
-                                      offset: const Offset(20, 15),
-                                      blurRadius: 15)
-                                ]),
-                          )),
+                              fontSize: 30,
+                              color: scaffoldColor,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 4,
+                              shadows: [
+                                Shadow(
+                                    color: Colors.black.withOpacity(0.8),
+                                    offset: const Offset(10, 15),
+                                    blurRadius: 15)
+                              ],
+                            ),
+                          ),
                         ),
                       ),
                     ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:serve_easy/screens/Welcome/welcome_screen.dart';
+import 'package:serve_easy/utils/colors.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -18,10 +19,10 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
+      backgroundColor: blueColor,
       body: Center(
         child: Image(
-            image: NetworkImage(
-                "https://is2-ssl.mzstatic.com/image/thumb/Purple114/v4/9a/53/e8/9a53e8fb-0ebf-9616-8118-245b30b7f0b0/AppIcon-1x_U007emarketing-0-10-0-0-85-220.png/1200x600wa.png")),
+            height: 90, image: AssetImage("assets/images/flashlogo.jpeg")),
       ),
     );
   }
