@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:lottie/lottie.dart';
 import 'package:serve_easy/models/category.dart';
 import 'package:serve_easy/screens/Additem/add_item.dart';
 import 'package:serve_easy/screens/Home/components/products_page.dart';
@@ -8,7 +9,6 @@ import 'package:serve_easy/screens/providers.dart';
 import 'package:serve_easy/services/firestore_service.dart';
 import 'package:serve_easy/utils/colors.dart';
 import 'package:serve_easy/utils/shimmer_widget.dart';
-import 'package:shimmer/shimmer.dart';
 
 class ItemsTab extends ConsumerWidget {
   const ItemsTab({Key? key}) : super(key: key);
@@ -25,7 +25,9 @@ class ItemsTab extends ConsumerWidget {
         onPressed: () {
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => AdminAddCategoryPage(),
+              builder: (context) => AdminAddCategoryPage(
+                snap: '',
+              ),
             ),
           );
         },
@@ -42,7 +44,16 @@ class ItemsTab extends ConsumerWidget {
               snapshot.data != null) {
             if (snapshot.data!.isEmpty) {
               return Center(
-                child: Text('No Data Add Products'),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Text("No products yet..."),
+                    Lottie.asset(
+                      "assets/anim/r9hU0MlATV.json",
+                      width: 300,
+                    ),
+                  ],
+                ),
               );
             }
             return ListView.builder(

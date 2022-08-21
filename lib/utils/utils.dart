@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:serve_easy/utils/colors.dart';
 
 class Utils {
   static final messengerKey = GlobalKey<ScaffoldMessengerState>();
@@ -7,7 +8,7 @@ class Utils {
     if (text == null) return;
     final snackBar = SnackBar(
       content: Text(text),
-      backgroundColor: Colors.red,
+      backgroundColor: kPrimaryColor,
     );
     messengerKey.currentState!
       ..removeCurrentSnackBar()

@@ -15,24 +15,34 @@ class HomePage extends StatelessWidget {
       child: Scaffold(
         backgroundColor: secondColor,
         appBar: AppBar(
-            leading:
-                IconButton(onPressed: () {}, icon: Icon(Icons.account_circle)),
-            actions: [
-              IconButton(
-                  onPressed: () {
-                    FirebaseAuth.instance.signOut();
-                  },
-                  icon: Icon(Icons.logout))
-            ],
-            backgroundColor: secondColor,
-            elevation: 0,
-            automaticallyImplyLeading: false,
-            centerTitle: true,
-            title: Image(
-                height: 40,
-                image: AssetImage(
-                  'assets/images/logo.jpeg',
-                ))),
+          leading: IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Icons.account_circle,
+              color: blueColor,
+            ),
+          ),
+          actions: [
+            IconButton(
+                onPressed: () {
+                  FirebaseAuth.instance.signOut();
+                },
+                icon: const Icon(
+                  Icons.logout,
+                  color: blueColor,
+                ))
+          ],
+          backgroundColor: secondColor,
+          elevation: 0,
+          automaticallyImplyLeading: false,
+          centerTitle: true,
+          title: const Image(
+            height: 40,
+            image: AssetImage(
+              'assets/images/logo.jpeg',
+            ),
+          ),
+        ),
         body: Column(
           children: [
             TabBar(
@@ -52,7 +62,7 @@ class HomePage extends StatelessWidget {
                 ),
               ],
             ),
-            Expanded(
+            const Expanded(
                 child: TabBarView(children: [
               ItemsTab(),
               OrdersTab(),

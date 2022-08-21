@@ -7,22 +7,24 @@ import 'package:serve_easy/screens/Additem/add_product.dart';
 import 'package:serve_easy/screens/providers.dart';
 import 'package:serve_easy/services/firestore_service.dart';
 import 'package:serve_easy/utils/colors.dart';
+import 'package:serve_easy/utils/utils.dart';
 import 'package:serve_easy/widgets/common_input_field.dart';
 import 'package:serve_easy/widgets/rounded_button.dart';
 
 class AdminAddCategoryPage extends ConsumerStatefulWidget {
-  const AdminAddCategoryPage({Key? key}) : super(key: key);
+  final snap;
+  const AdminAddCategoryPage({Key? key, required this.snap}) : super(key: key);
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
-      _AdminAddProductPageState();
+      _AdminAddCategoryPageState();
 }
 
-class _AdminAddProductPageState extends ConsumerState<AdminAddCategoryPage> {
+class _AdminAddCategoryPageState extends ConsumerState<AdminAddCategoryPage> {
   final titleTextEditingController = TextEditingController();
   static final formKey = GlobalKey<FormState>();
   final categoryImageEditingController = TextEditingController();
-  final categoryid = randomAlphaNumeric(16);
+  //final categoryid = randomAlphaNumeric(16);
 //  final descriptionEditingController = TextEditingController();
   //FirestoreService firestoreService = FirestoreService(uid: uid);
   _addcategory() async {
@@ -35,59 +37,72 @@ class _AdminAddProductPageState extends ConsumerState<AdminAddCategoryPage> {
     if (!isValid) return;
     {
       await storage.addCategory(
-          Category(
-              categoryName: titleTextEditingController.text,
-              categoryImage: categoryImageEditingController.text,
-              categoryId: categoryid,
-              uid: _auth.currentUser!.uid),
-          categoryid);
+        Category(
+            categoryName: titleTextEditingController.text,
+            categoryImage: categoryImageEditingController.text,
+            categoryId: _auth.currentUser!.uid,
+            uid: _auth.currentUser!.uid),
+      );
+      Utils.showSnackBar("Category created successfully");
     }
 
     Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => AdminAddProductPage(categoryid),
-        ));
+      context,
+      MaterialPageRoute(
+        builder: (context) => AdminAddProductPage(),
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          centerTitle: true,
-          elevation: 0,
-          automaticallyImplyLeading: false,
-          backgroundColor: secondColor,
-          title: const Text('A D D  C A T E G O R Y'),
-        ),
-        body: Form(
-          key: formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              CommonInputField(
-                nameController: titleTextEditingController,
-                hintText: 'Add Category Name',
-                icon: Icons.cabin,
-              ),
-              CommonInputField(
-                nameController: categoryImageEditingController,
-                hintText: 'Add Category Image Url',
-                icon: Icons.image,
-              ),
-              const Spacer(),
-              RoundedButton(
-                  text: 'Create Category',
-                  onPressed: () {
-                    _addcategory();
-                  }),
-              SizedBox(
-                height: 30,
-              )
-            ],
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          icon: const Icon(
+            Icons.arrow_back,
+            color: blueColor,
           ),
+        ),
+        backgroundColor: secondColor,
+        centerTitle: true,
+        elevation: 0,
+        title: const Image(
+          height: 40,
+          image: AssetImage(
+            'assets/images/logo.jpeg',
+          ),
+        ),
+      ),
+      body: Form(
+        key: formKey,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            CommonInputField(
+              nameController: titleTextEditingController,
+              hintText: 'Add Category Name',
+              icon: Icons.cabin,
+            ),
+            CommonInputField(
+              nameController: categoryImageEditingController,
+              hintText: 'Add Category Image Url',
+              icon: Icons.image,
+            ),
+            const Spacer(),
+            RoundedButton(
+                text: 'Create Category',
+                onPressed: () {
+                  _addcategory();
+                }),
+            const SizedBox(
+              height: 30,
+            )
+          ],
         ),
       ),
     );

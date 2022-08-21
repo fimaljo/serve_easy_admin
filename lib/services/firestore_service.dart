@@ -11,24 +11,25 @@ class FirestoreService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  Future<void> addCategory(Category category, String categoryid) async {
+  Future<void> addCategory(
+    Category category,
+  ) async {
     await _firestore
         .collection('category')
-        .doc(categoryid)
+        .doc(_auth.currentUser!.uid)
         .set(category.toMap())
         .catchError((e) {
       log(e.toString());
     });
   }
 
-  Future<void> addProductData(Product productdata, String categoryid) async {
+  Future<void> addProductData(Product productdata, String productsid) async {
     await _firestore
-        .collection('adminuser')
-        .doc(_auth.currentUser!.uid)
         .collection('category')
-        .doc(categoryid)
-        .collection('productdata')
-        .add(productdata.toMap())
+        .doc(_auth.currentUser!.uid)
+        .collection('productsdata')
+        .doc(productsid)
+        .set(productdata.toMap())
         .catchError((e) {
       log(e.toString());
     });
@@ -47,12 +48,10 @@ class FirestoreService {
             }).toList()); // build a list out of the products mapping
   }
 
-  Stream<List<Product>> getProducts(String categoryid) {
+  Stream<List<Product>> getProducts() {
     return firestore
-        .collection('adminuser')
-        .doc(_auth.currentUser!.uid)
         .collection('category')
-        .doc(categoryid)
+        .doc(_auth.currentUser!.uid)
         .collection('productdata')
         .snapshots()
         .map((snapshot) => snapshot.docs.map((doc) {

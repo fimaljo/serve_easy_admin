@@ -1,7 +1,7 @@
 class Category {
   final String categoryName;
   final String categoryImage;
-  final String categoryId;
+  final dynamic categoryId;
   final String uid;
   Category({
     required this.categoryName,
