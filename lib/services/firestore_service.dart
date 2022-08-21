@@ -11,12 +11,11 @@ class FirestoreService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   FirebaseFirestore firestore = FirebaseFirestore.instance;
-  Future<void> addCategory(
-    Category category,
-  ) async {
+  Future<void> addCategory(Category category, String categoryid) async {
     await _firestore
         .collection('category')
-        .add(category.toMap())
+        .doc(categoryid)
+        .set(category.toMap())
         .catchError((e) {
       log(e.toString());
     });
@@ -38,9 +37,8 @@ class FirestoreService {
 //uid autogeneated aie tolla string lek matti kodukam
   Stream<List<Category>> getProductsCategory() {
     return firestore
-        .collection('adminuser')
-        .doc(_auth.currentUser!.uid)
         .collection('category')
+        .where('uid', isEqualTo: FirebaseAuth.instance.currentUser!.uid)
         .snapshots()
         .map((snapshot) => snapshot.docs.map((doc) {
               // loop through docs

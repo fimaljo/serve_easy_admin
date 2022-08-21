@@ -22,23 +22,25 @@ class _AdminAddProductPageState extends ConsumerState<AdminAddCategoryPage> {
   final titleTextEditingController = TextEditingController();
   static final formKey = GlobalKey<FormState>();
   final categoryImageEditingController = TextEditingController();
+  final categoryid = randomAlphaNumeric(16);
 //  final descriptionEditingController = TextEditingController();
   //FirestoreService firestoreService = FirestoreService(uid: uid);
   _addcategory() async {
     final storage = ref.read(databaseProvider);
     final FirebaseAuth _auth = FirebaseAuth.instance;
     final isValid = formKey.currentState!.validate();
-    final categoryid = randomAlphaNumeric(16);
     if (storage == null) {
       return;
     }
     if (!isValid) return;
     {
       await storage.addCategory(
-        Category(
-            categoryImage: categoryImageEditingController.text,
-            categoryName: titleTextEditingController.text),
-      );
+          Category(
+              categoryName: titleTextEditingController.text,
+              categoryImage: categoryImageEditingController.text,
+              categoryId: categoryid,
+              uid: _auth.currentUser!.uid),
+          categoryid);
     }
 
     Navigator.pushReplacement(

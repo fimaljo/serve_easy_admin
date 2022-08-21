@@ -1,16 +1,21 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:serve_easy/models/category.dart';
 import 'package:serve_easy/screens/Additem/add_item.dart';
 import 'package:serve_easy/screens/Home/components/products_page.dart';
 import 'package:serve_easy/screens/providers.dart';
+import 'package:serve_easy/services/firestore_service.dart';
 import 'package:serve_easy/utils/colors.dart';
+import 'package:serve_easy/utils/shimmer_widget.dart';
+import 'package:shimmer/shimmer.dart';
 
 class ItemsTab extends ConsumerWidget {
   const ItemsTab({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, ref) {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
     return Scaffold(
       floatingActionButton: FloatingActionButton.extended(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
@@ -30,10 +35,16 @@ class ItemsTab extends ConsumerWidget {
         // itemCount: 10,
         //physics: const ClampingScrollPhysics(),
         // scrollDirection: Axis.vertical,
-        stream: ref.read(databaseProvider)!.getProductsCategory(),
+        stream:
+            FirestoreService(uid: _auth.currentUser!.uid).getProductsCategory(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.active &&
               snapshot.data != null) {
+            if (snapshot.data!.isEmpty) {
+              return Center(
+                child: Text('No Data Add Products'),
+              );
+            }
             return ListView.builder(
                 itemCount: snapshot.data!.length,
                 itemBuilder: (context, index) {
@@ -96,8 +107,16 @@ class ItemsTab extends ConsumerWidget {
                   );
                 });
           }
-          return const Center(
-            child: CircularProgressIndicator(),
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                ShimmerWidget(height: 120),
+                ShimmerWidget(height: 120),
+                ShimmerWidget(height: 120),
+                ShimmerWidget(height: 120),
+                ShimmerWidget(height: 120),
+              ],
+            ),
           );
         },
       ),
