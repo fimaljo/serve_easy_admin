@@ -5,13 +5,15 @@ import 'package:random_string/random_string.dart';
 import 'package:serve_easy/models/product.dart';
 import 'package:serve_easy/screens/Home/home_page.dart';
 import 'package:serve_easy/screens/providers.dart';
+import 'package:serve_easy/services/firestore_service.dart';
 import 'package:serve_easy/utils/colors.dart';
 import 'package:serve_easy/widgets/common_input_field.dart';
 import 'package:serve_easy/widgets/rounded_button.dart';
 import 'package:serve_easy/widgets/submit_button.dart';
 
 class AdminAddProductPage extends ConsumerStatefulWidget {
-  const AdminAddProductPage({Key? key}) : super(key: key);
+  final snap;
+  const AdminAddProductPage({Key? key, required this.snap}) : super(key: key);
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -23,35 +25,38 @@ class _AdminAddProductPageState extends ConsumerState<AdminAddProductPage> {
   final productDescriptionEditingController = TextEditingController();
   final productPriceEditingController = TextEditingController();
   static final formKey = GlobalKey<FormState>();
-  final productsid = randomAlphaNumeric(16);
+  // final productsid = randomAlphaNumeric(16);
   // FirebaseFirestore firestore = FirebaseFirestore.instance;
-  _addproduct() async {
-    final storage = ref.read(databaseProvider);
-    final FirebaseAuth _auth = FirebaseAuth.instance;
-    final isValid = formKey.currentState!.validate();
-    //  final categoryid = randomAlphaNumeric(16);
-    if (storage == null) {
-      return;
-    }
-    if (!isValid) return;
-    {
-      await storage.addProductData(
-        Product(
-            name: productNameEditingController.text,
-            description: productDescriptionEditingController.text,
-            price: double.parse(productPriceEditingController.text),
-            imageUrl: "productimg",
-            productid: productsid),
-        productsid,
-      );
-    }
+  // _addproduct() async {
+  //   final FirebaseAuth _auth = FirebaseAuth.instance;
+  //   final isValid = formKey.currentState!.validate();
+  //   //  final categoryid = randomAlphaNumeric(16);
 
-    Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-          builder: (context) => AdminAddProductPage(),
-        ));
-  }
+  //   if (!isValid) return;
+  //   {
+  //     String res = await FirestoreService().addProducts(
+  //         productNameEditingController.text,
+  //         productDescriptionEditingController.text,
+  //         double.parse(productPriceEditingController.text),
+  //         "Product Image",
+  //         "");
+  //     //  await storage.addProductData(
+  //     //  Product(
+  //     //  name: productNameEditingController.text,
+  //     // description: productDescriptionEditingController.text,
+  //     // price: double.parse(productPriceEditingController.text),
+  //     // imageUrl: "productimg",
+  //     //  productid: productsid),
+  //     // productsid,
+  //     // );
+  //   }
+
+  //   Navigator.pushReplacement(
+  //       context,
+  //       MaterialPageRoute(
+  //         builder: (context) => AdminAddProductPage(),
+  //       ));
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -59,11 +64,24 @@ class _AdminAddProductPageState extends ConsumerState<AdminAddProductPage> {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
+          leading: IconButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            icon: const Icon(
+              Icons.arrow_back,
+              color: blueColor,
+            ),
+          ),
+          backgroundColor: secondColor,
           centerTitle: true,
           elevation: 0,
-          automaticallyImplyLeading: false,
-          backgroundColor: secondColor,
-          title: const Text('A D D  P R O D U C T'),
+          title: const Image(
+            height: 40,
+            image: AssetImage(
+              'assets/images/Serve easy-08.png',
+            ),
+          ),
         ),
         body: Form(
           key: formKey,
@@ -98,23 +116,26 @@ class _AdminAddProductPageState extends ConsumerState<AdminAddProductPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SubmitButton(
-                      text: "Submit",
-                      onPressed: () {
-                        Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => HomePage(),
-                            ));
-                      }),
                   const SizedBox(
                     width: 30,
                   ),
-                  SubmitButton(
-                      text: "Add Next Product",
-                      onPressed: () {
-                        _addproduct();
-                      }),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 40),
+                    child: SubmitButton(
+                      onPressed: () async {
+                        {
+                          await FirestoreService().addProducts(
+                              productNameEditingController.text,
+                              productDescriptionEditingController.text,
+                              double.parse(productPriceEditingController.text),
+                              "Product Image",
+                              widget.snap['categoryId']);
+                          Navigator.pop(context);
+                        }
+                      },
+                      text: "Add",
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(

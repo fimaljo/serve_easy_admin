@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:random_string/random_string.dart';
 import 'package:serve_easy/models/category.dart';
 import 'package:serve_easy/screens/Additem/add_product.dart';
+import 'package:serve_easy/screens/Home/components/items_tab.dart';
 import 'package:serve_easy/screens/providers.dart';
 import 'package:serve_easy/services/firestore_service.dart';
 import 'package:serve_easy/utils/colors.dart';
@@ -12,8 +13,9 @@ import 'package:serve_easy/widgets/common_input_field.dart';
 import 'package:serve_easy/widgets/rounded_button.dart';
 
 class AdminAddCategoryPage extends ConsumerStatefulWidget {
-  final snap;
-  const AdminAddCategoryPage({Key? key, required this.snap}) : super(key: key);
+  const AdminAddCategoryPage({
+    Key? key,
+  }) : super(key: key);
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() =>
@@ -24,38 +26,36 @@ class _AdminAddCategoryPageState extends ConsumerState<AdminAddCategoryPage> {
   final titleTextEditingController = TextEditingController();
   static final formKey = GlobalKey<FormState>();
   final categoryImageEditingController = TextEditingController();
-  //final categoryid = randomAlphaNumeric(16);
 //  final descriptionEditingController = TextEditingController();
   //FirestoreService firestoreService = FirestoreService(uid: uid);
-  _addcategory() async {
-    final storage = ref.read(databaseProvider);
-    final FirebaseAuth _auth = FirebaseAuth.instance;
+  _addcategory(
+    String uid,
+  ) async {
     final isValid = formKey.currentState!.validate();
-    if (storage == null) {
-      return;
-    }
+
     if (!isValid) return;
     {
-      await storage.addCategory(
-        Category(
-            categoryName: titleTextEditingController.text,
-            categoryImage: categoryImageEditingController.text,
-            categoryId: _auth.currentUser!.uid,
-            uid: _auth.currentUser!.uid),
+      String res = await FirestoreService().addCategory(
+        titleTextEditingController.text,
+        categoryImageEditingController.text,
+        uid,
       );
-      Utils.showSnackBar("Category created successfully");
+      if (res == "success") {
+        Utils.showSnackBar("category created successfully");
+      }
     }
 
-    Navigator.pushReplacement(
+    Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => AdminAddProductPage(),
+        builder: (context) => ItemsTab(),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final FirebaseAuth _auth = FirebaseAuth.instance;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
@@ -74,7 +74,7 @@ class _AdminAddCategoryPageState extends ConsumerState<AdminAddCategoryPage> {
         title: const Image(
           height: 40,
           image: AssetImage(
-            'assets/images/logo.jpeg',
+            'assets/images/category.png',
           ),
         ),
       ),
@@ -97,7 +97,7 @@ class _AdminAddCategoryPageState extends ConsumerState<AdminAddCategoryPage> {
             RoundedButton(
                 text: 'Create Category',
                 onPressed: () {
-                  _addcategory();
+                  _addcategory(_auth.currentUser!.uid);
                 }),
             const SizedBox(
               height: 30,

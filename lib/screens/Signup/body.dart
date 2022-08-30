@@ -10,8 +10,6 @@ import 'package:serve_easy/widgets/rounded_button.dart';
 import 'package:serve_easy/widgets/rounded_input_field.dart';
 import 'package:serve_easy/widgets/rounded_password_field.dart';
 
-import '../../utils/colors.dart';
-
 class Body extends StatefulWidget {
   const Body({
     Key? key,

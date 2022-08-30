@@ -1,30 +1,34 @@
-class Product {
-  final String name;
-  final String description;
-  final double price;
-  final String imageUrl;
-  final dynamic productid;
-  Product({
-    required this.name,
-    required this.description,
-    required this.price,
-    required this.imageUrl,
-    required this.productid,
-  });
-  Map<String, dynamic> toMap() {
-    return {
-      'name': name,
-      'description': description,
-      'price': price,
-      'imageUrl': imageUrl,
-      'productid': productid,
-    };
-  }
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-  Product.fromMap(Map<String, dynamic> map)
-      : name = map['name'] ?? "",
-        description = map['description'] ?? "",
-        price = map['price'] ?? 0.0,
-        imageUrl = map['imageUrl'] ?? "",
-        productid = map['productid'] ?? "";
-}
+// class Product {
+//   final String name;
+//   final String description;
+//   final double price;
+//   final String imageUrl;
+//   final String productid;
+//   Product({
+//     required this.name,
+//     required this.description,
+//     required this.price,
+//     required this.imageUrl,
+//     required this.productid,
+//   });
+//   static Product fromSnap(DocumentSnapshot snap) {
+//     var snapshot = snap.data() as Map<dynamic, dynamic>;
+//     return Product(
+//       name: snapshot["name"],
+//       description: snapshot["description"],
+//       price: snapshot["price"],
+//       imageUrl: snapshot["imageUrl"],
+//       productid: snapshot["productid"],
+//     );
+//   }
+
+//   Map<dynamic, dynamic> toJson() => {
+//         "name": name,
+//         "description": description,
+//         "price": price,
+//         "imageUrl": imageUrl,
+//         "productid": productid,
+//       };
+// }

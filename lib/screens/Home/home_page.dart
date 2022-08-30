@@ -39,7 +39,7 @@ class HomePage extends StatelessWidget {
           title: const Image(
             height: 40,
             image: AssetImage(
-              'assets/images/logo.jpeg',
+              'assets/images/logo.png',
             ),
           ),
         ),
@@ -52,13 +52,22 @@ class HomePage extends StatelessWidget {
               unselectedLabelColor: blueColor,
               tabs: const [
                 Tab(
-                  text: 'ITEAMS',
+                  child: Text(
+                    'Category',
+                    style: TextStyle(fontWeight: FontWeight.w400, fontSize: 20),
+                  ),
                 ),
                 Tab(
-                  text: 'ORDERS',
+                  child: Text(
+                    'Orders',
+                    style: TextStyle(fontWeight: FontWeight.w400, fontSize: 20),
+                  ),
                 ),
                 Tab(
-                  text: 'PAYMENTS',
+                  child: Text(
+                    'Payments',
+                    style: TextStyle(fontWeight: FontWeight.w400, fontSize: 20),
+                  ),
                 ),
               ],
             ),

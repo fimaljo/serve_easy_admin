@@ -19,16 +19,16 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
-      backgroundColor: blueColor,
+      backgroundColor: scaffoldColor,
       body: Center(
-        child: Image(
-            height: 90, image: AssetImage("assets/images/flashlogo.jpeg")),
+        child:
+            Image(height: 90, image: AssetImage("assets/images/flashlogo.png")),
       ),
     );
   }
 
   Future<void> gotoHome() async {
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(Duration(seconds: 2));
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => WelcomeScreen(),
