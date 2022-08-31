@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:random_string/random_string.dart';
 import 'package:serve_easy/models/category.dart';
 import 'package:serve_easy/screens/Additem/add_product.dart';
-import 'package:serve_easy/screens/Home/components/items_tab.dart';
+import 'package:serve_easy/screens/Home/items_tab.dart';
 import 'package:serve_easy/screens/providers.dart';
 import 'package:serve_easy/services/firestore_service.dart';
 import 'package:serve_easy/utils/colors.dart';
@@ -42,15 +42,9 @@ class _AdminAddCategoryPageState extends ConsumerState<AdminAddCategoryPage> {
       );
       if (res == "success") {
         Utils.showSnackBar("category created successfully");
+        Navigator.pop(context);
       }
     }
-
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => ItemsTab(),
-      ),
-    );
   }
 
   @override
@@ -86,12 +80,20 @@ class _AdminAddCategoryPageState extends ConsumerState<AdminAddCategoryPage> {
             CommonInputField(
               nameController: titleTextEditingController,
               hintText: 'Add Category Name',
-              icon: Icons.cabin,
+              icon: Image.asset(
+                'assets/icons/apps.png',
+                height: 20,
+                color: blueColor,
+              ),
             ),
             CommonInputField(
               nameController: categoryImageEditingController,
               hintText: 'Add Category Image Url',
-              icon: Icons.image,
+              icon: Image.asset(
+                'assets/icons/link-alt.png',
+                height: 20,
+                color: blueColor,
+              ),
             ),
             const Spacer(),
             RoundedButton(

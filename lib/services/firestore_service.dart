@@ -1,9 +1,11 @@
 import 'dart:developer';
+import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:serve_easy/models/category.dart';
 import 'package:serve_easy/models/product.dart';
+import 'package:serve_easy/services/storage_methods.dart';
 import 'package:uuid/uuid.dart';
 
 class FirestoreService {
@@ -37,11 +39,13 @@ class FirestoreService {
     String name,
     String description,
     double price,
-    String imageUrl,
     String categoryId,
+    Uint8List file,
   ) async {
     String res = "some error pccured";
     try {
+      String productPicture = await StorageMethods()
+          .uploadImageToStorage('productPicture', file, true);
       String productsId = const Uuid().v1();
       _firestore
           .collection('category')
@@ -52,7 +56,7 @@ class FirestoreService {
         "name": name,
         "description": description,
         "price": price,
-        "imageUrl": imageUrl,
+        "imageUrl": productPicture,
         "productid": productsId,
         "categoryId": categoryId,
       });
@@ -67,12 +71,14 @@ class FirestoreService {
     String name,
     String description,
     double price,
-    String imageUrl,
+    Uint8List file,
     String categoryId,
     String productsId,
   ) async {
     String res = "some error pccured";
     try {
+      String productPictureUpdate = await StorageMethods()
+          .uploadImageToStorage('productPicture', file, true);
       _firestore
           .collection('category')
           .doc(categoryId)
@@ -82,7 +88,7 @@ class FirestoreService {
         'name': name,
         'description': description,
         'price': price,
-        'imageUrl': imageUrl,
+        'imageUrl': productPictureUpdate,
         'productid': productsId,
       });
       res = "success";

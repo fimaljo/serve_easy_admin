@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:serve_easy/screens/Welcome/welcome_screen.dart';
 import 'package:serve_easy/splash_screen.dart';
 import 'package:serve_easy/utils/colors.dart';
 import 'package:serve_easy/utils/utils.dart';
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
       title: 'Serve Easy',
       theme: ThemeData(
           primaryColor: kPrimaryColor, scaffoldBackgroundColor: secondColor),
-      home: SplashScreen(),
+      home: WelcomeScreen(),
     );
   }
 }

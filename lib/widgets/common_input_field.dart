@@ -10,7 +10,7 @@ class CommonInputField extends StatelessWidget {
   }) : super(key: key);
   final String hintText;
   final TextEditingController nameController;
-  final IconData icon;
+  final Widget icon;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -23,7 +23,7 @@ class CommonInputField extends StatelessWidget {
       child: TextFormField(
         controller: nameController,
         decoration: InputDecoration(
-          icon: Icon(icon),
+          icon: icon,
           hintText: hintText,
           border: InputBorder.none,
         ),

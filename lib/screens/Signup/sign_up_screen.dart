@@ -1,6 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:serve_easy/screens/Home/home_page.dart';
+import 'package:serve_easy/screens/MainScreen/home_page.dart';
 import 'package:serve_easy/screens/Signup/body.dart';
 import 'package:serve_easy/screens/Signup/components/verify_emil.dart';
 

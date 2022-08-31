@@ -146,7 +146,11 @@ class ProductsCard extends StatelessWidget {
     String productsId,
   ) async {
     try {
-      await FirestoreService().deleteProduct(categoryId, productsId);
+      String res =
+          await FirestoreService().deleteProduct(categoryId, productsId);
+      if (res == "success") {
+        Utils.showSnackBar("product deleted successfully");
+      }
     } catch (err) {
       Utils.showSnackBar(err.toString());
     }
@@ -158,115 +162,97 @@ class ProductsCard extends StatelessWidget {
       padding: const EdgeInsets.all(20.0),
       child: Container(
         width: 200,
-        height: 130,
+        height: 110,
         decoration: BoxDecoration(
             gradient: const LinearGradient(
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
                 blueColor,
-                Colors.white,
+                blueColor,
               ],
             ),
             boxShadow: const [
               BoxShadow(
                 color: Color(0xFFe8e8e8),
-                blurRadius: 5.0,
+                blurRadius: 10.0,
                 offset: Offset(0, 14),
               ),
               BoxShadow(
-                color: Color(0xFFe8e8e8),
+                color: Colors.transparent,
                 offset: Offset(-5, 0),
               ),
               BoxShadow(
-                color: blueColor,
+                color: scaffoldColor,
                 offset: Offset(5, 0),
               ),
             ],
             borderRadius: BorderRadius.circular(17)),
-        child: Row(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(
-                left: 20,
+        child: Padding(
+          padding: const EdgeInsets.all(17.0),
+          child: Row(
+            children: [
+              CircleAvatar(
+                radius: 45,
+                backgroundImage: NetworkImage(snap['imageUrl']),
               ),
-              child: Stack(
+              SizedBox(
+                width: 10,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    height: 105,
-                    width: 80,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(17),
-                      image: const DecorationImage(
-                        fit: BoxFit.cover,
-                        image: NetworkImage(
-                            "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8YmVlZiUyMGJ1cmdlcnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=500&q=60"),
+                  Text(
+                    snap['name'],
+                    maxLines: 4,
+                    style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 15,
+                        overflow: TextOverflow.fade),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  SizedBox(
+                    height: 30,
+                    width: 160,
+                    child: ReadMoreText(
+                      snap['description'],
+                      trimLines: 4,
+                      colorClickableText: Colors.white,
+                      trimMode: TrimMode.Line,
+                      trimCollapsedText: 'Show more',
+                      trimExpandedText: 'Show less',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w400,
                       ),
                     ),
                   ),
-                  Positioned(
-                    bottom: 0,
-                    left: 15,
-                    child: Text(
-                      "\u{20B9}${snap['price'].toString()}",
-                      style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                          shadows: [
-                            BoxShadow(
-                              color: Colors.black,
-                              blurRadius: 5.0,
-                              offset: Offset(0, 2),
-                            ),
-                          ]),
-                    ),
-                  ),
+                  Text(
+                    "\u{20B9}${snap['price'].toString()}",
+                    style: TextStyle(
+                        color: Colors.white, fontWeight: FontWeight.w500),
+                  )
                 ],
               ),
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 12, top: 20, right: 15),
-                  child: SizedBox(
-                    height: 40,
-                    width: 160,
-                    child: Text(
-                      snap['name'],
-                      style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 20,
-                          overflow: TextOverflow.fade),
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 50,
-                  width: 170,
-                  child: ReadMoreText(
-                    snap['description'],
-                    trimLines: 2,
-                    colorClickableText: Colors.pink,
-                    trimMode: TrimMode.Line,
-                    trimCollapsedText: 'Show more',
-                    trimExpandedText: 'Show less',
-                    moreStyle: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ],
-            ),
-            IconButton(
+              Spacer(),
+              IconButton(
                 onPressed: () {
                   deleteProduct(
                     snap['categoryId'] ?? "",
                     snap['productid'] ?? "",
                   );
                 },
-                icon: Icon(Icons.delete))
-          ],
+                icon: Image.asset(
+                  'assets/icons/trash.png',
+                  height: 20,
+                  color: Colors.white,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

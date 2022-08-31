@@ -1,8 +1,15 @@
+import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:serve_easy/screens/MainScreen/home_page.dart';
 import 'package:serve_easy/screens/Login/login_screen.dart';
 import 'package:serve_easy/screens/Signup/background.dart';
+import 'package:serve_easy/services/auth_methods.dart';
+import 'package:serve_easy/services/storage_methods.dart';
+import 'package:serve_easy/utils/colors.dart';
 import 'package:serve_easy/utils/utils.dart';
 import 'package:serve_easy/widgets/already_have_an_account_check.dart';
 import 'package:serve_easy/widgets/common_input_field.dart';
@@ -24,6 +31,7 @@ class _BodyState extends State<Body> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController nameController = TextEditingController();
+  Uint8List? _file;
   @override
   void dispose() {
     emailController.dispose();
@@ -31,6 +39,46 @@ class _BodyState extends State<Body> {
     nameController.dispose();
 
     super.dispose();
+  }
+
+  _selectImage(BuildContext parentContext) async {
+    return showDialog(
+      context: parentContext,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+          title: const Text('Add Your logo'),
+          children: <Widget>[
+            SimpleDialogOption(
+                padding: const EdgeInsets.all(20),
+                child: const Text('Take a photo'),
+                onPressed: () async {
+                  Navigator.pop(context);
+                  Uint8List file = await pickImage(ImageSource.camera);
+                  setState(() {
+                    _file = file;
+                  });
+                }),
+            SimpleDialogOption(
+                padding: const EdgeInsets.all(20),
+                child: const Text('Choose from Gallery'),
+                onPressed: () async {
+                  Navigator.of(context).pop();
+                  Uint8List file = await pickImage(ImageSource.gallery);
+                  setState(() {
+                    _file = file;
+                  });
+                }),
+            SimpleDialogOption(
+              padding: const EdgeInsets.all(20),
+              child: const Text("Cancel"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            )
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -51,17 +99,36 @@ class _BodyState extends State<Body> {
               SizedBox(
                 height: size.height * 0.03,
               ),
-              Container(
-                height: 140,
-                width: 140,
-                decoration: const BoxDecoration(
-                    color: Colors.red, shape: BoxShape.circle),
-              ),
+              _file != null
+                  ? Container(
+                      height: 140,
+                      width: 140,
+                      child: Image(
+                        image: MemoryImage(_file!),
+                        fit: BoxFit.cover,
+                      ),
+                      decoration: const BoxDecoration(
+                          color: Colors.red, shape: BoxShape.circle),
+                    )
+                  : InkWell(
+                      onTap: () => _selectImage(context),
+                      child: Container(
+                        height: 140,
+                        width: 140,
+                        child: Center(child: Text("Select Your logo")),
+                        decoration: const BoxDecoration(
+                            color: Colors.red, shape: BoxShape.circle),
+                      ),
+                    ),
               SizedBox(
                 height: size.height * 0.03,
               ),
               CommonInputField(
-                  icon: Icons.restaurant,
+                  icon: Image.asset(
+                    'assets/icons/utensils.png',
+                    height: 20,
+                    color: blueColor,
+                  ),
                   hintText: "Restorent Name",
                   nameController: nameController),
               RoundedInputField(
@@ -102,49 +169,24 @@ class _BodyState extends State<Body> {
 
   Future signUp() async {
     final isValid = formKey.currentState!.validate();
-    final FirebaseAuth auth = FirebaseAuth.instance;
-    final User? user = auth.currentUser;
-    final String kUseremail = emailController.text.trim();
-    final String kUserpasseord = emailController.text.trim();
-    //String myuid = user.uid;
 
     if (!isValid) return;
 
     try {
-      await FirebaseAuth.instance
-          .createUserWithEmailAndPassword(
-              email: kUseremail, password: kUserpasseord)
-          .then((value) {
-        if (value != null && value.user != null) {
-          FirebaseFirestore.instance
-              .collection('adminuser')
-              .doc(value.user!.uid)
-              .set({
-            'hotel logo': 'hotelLogo',
-            'hotel name': nameController.text.trim(),
-            'email': kUseremail,
-            'uid': value.user!.uid,
-          });
-        }
-      });
-      //add user detiles
-
+      String res = await AuthMethods().signupUser(
+          email: emailController.text.trim(),
+          password: passwordController.text.trim(),
+          hotelname: nameController.text.trim(),
+          file: _file!);
+      if (res != 'success') {
+        Utils.showSnackBar("success");
+      }
+      // if (res != 'success') {
+      //   Navigator.of(context).pushReplacement(
+      //       MaterialPageRoute(builder: (context) => HomePage()));
+      // }
     } on FirebaseAuthException catch (e) {
       Utils.showSnackBar(e.message);
     }
   }
-
-  // Future addUserDetails(
-  //   String hotelLogo,
-  //  String hotelName,
-  //  String email,
-  //  String uid,
-  // ) async {
-  //  await FirebaseFirestore.instance.collection('adminuser').add({
-  //    'hotel logo': hotelLogo,
-  //   'hotel name': hotelName,
-  //   'email': email,
-  //    'uid': uid,
-  //  });
-  // }
 }
